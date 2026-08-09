@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Container 1: The Solved Challenge
+  web:
+    image: dhruvchadha1612/docker-challenge-solved-dhruv:latest
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount the shared volume inside Nginx's web root under a "metrics" folder
+      - shared_metrics:/var/www/html/metrics
+    restart: always
+
+  # Container 2: The OS Metric Scraper
+  scraper:
+    build: 
+      context: ./scraper
+    volumes:
+      # Mount the same shared volume to where the Python script writes
+      - shared_metrics:/shared
+    restart: always
+
+# Define the shared volume
+volumes:
+  shared_metrics:
